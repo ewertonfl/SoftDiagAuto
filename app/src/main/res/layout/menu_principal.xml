@@ -82,7 +82,8 @@
         android:layout_column="1"
         android:contentDescription="@string/btParametro"
         android:adjustViewBounds="false"
-        android:layout_gravity="top"/>
+        android:layout_gravity="top"
+        android:onClick="parametros"/>
 
     <TextView
         android:text="@string/btParametro"

@@ -27,8 +27,14 @@ public class MenuPrincipal extends Activity {
         //verificarUsuario();
     }
 
+    // Método usado para chamar a tela de informações
     public void informacoesCentral(View v){
         startActivity(new Intent(this,InformacoesVeiculo.class));
+    }
+
+    // Método usado para chamar a tela de parâmetros
+    public void parametros(View v){
+        startActivity(new Intent(this,Parametros.class));
     }
 
     public void confirmarSaida(View v) { // Método para verificar se o usuário deseja realmente sair

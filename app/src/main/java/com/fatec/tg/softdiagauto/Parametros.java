@@ -1,5 +1,6 @@
 package com.fatec.tg.softdiagauto;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -10,19 +11,23 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class InformacoesVeiculo extends AppCompatActivity {
+/**
+ * Created by Gabriel Rubio on 19/10/2016.
+ */
+
+public class Parametros extends AppCompatActivity {
 
     ListView l1;
-    String[] t1={"Chassi","Número do motor"};
-    String[] d1={"XXXXXXXXXXXXXXXXX","0678°"};
-    int[] i1 ={R.drawable.chassis,R.drawable.motor};
+    String[] t1={"Rotação do motor","Temperatura da água","Tensão da bateria"};
+    String[] d1={"700 Rpm","56 C°","12 V"};
+    int[] i1 ={R.drawable.rotacao_motor,R.drawable.termometro,R.drawable.bateria};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_informacoes_veiculo);
-        l1=(ListView)findViewById(R.id.listViewInformacoes);
-        l1.setAdapter(new InformacoesVeiculo.dataListAdapter(t1,d1,i1));
+        setContentView(R.layout.activity_parametros);
+        l1=(ListView)findViewById(R.id.listViewParametros);
+        l1.setAdapter(new dataListAdapter(t1,d1,i1));
     }
 
     class dataListAdapter extends BaseAdapter {
