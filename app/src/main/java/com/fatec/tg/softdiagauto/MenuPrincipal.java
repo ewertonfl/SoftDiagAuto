@@ -37,6 +37,11 @@ public class MenuPrincipal extends Activity {
         startActivity(new Intent(this,Parametros.class));
     }
 
+    // Método usado para chamar a tela de falhas
+    public void falhas(View v){
+        startActivity(new Intent(this,Falhas.class));
+    }
+
     public void confirmarSaida(View v) { // Método para verificar se o usuário deseja realmente sair
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
         alertDialogBuilder.setTitle("Você está saindo");

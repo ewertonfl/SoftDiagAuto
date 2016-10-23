@@ -14,6 +14,12 @@
     <string name="btParametro">Parâmetros</string>
     <string name="icon_back">Voltar</string>
     <string name="title_activity_configuracoes">Configurações</string>
+    <string name="gerar_relatorio">Gerar relatório</string>
+    <string name="filtrar">Filtrar</string>
+    <string name="apagar_falhas">Apagar falhas</string>
+
+
+
 
 
 </resources>

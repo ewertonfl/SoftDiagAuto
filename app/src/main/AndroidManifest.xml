@@ -26,12 +26,20 @@
         <activity
             android:name=".InformacoesVeiculo"
             android:label="Informações do veículo"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme">
         </activity>
         <activity
             android:name=".Parametros"
             android:label="Parâmetros"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme">
+        </activity>
+        <activity
+            android:name=".Falhas"
+            android:label="Falhas"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme">
         </activity>
     </application>
 

@@ -1,15 +1,19 @@
 package com.fatec.tg.softdiagauto;
 
-import android.app.Activity;
+import android.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Created by Gabriel Rubio on 19/10/2016.
@@ -25,9 +29,43 @@ public class Parametros extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ActionBar act = getActionBar();
+
+        if(act == null)
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        else
+            act.setDisplayHomeAsUpEnabled(true);
+
         setContentView(R.layout.activity_parametros);
         l1=(ListView)findViewById(R.id.listViewParametros);
         l1.setAdapter(new dataListAdapter(t1,d1,i1));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_parametros,menu);
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                finish();
+                break;
+            case R.id.gerar_relatorio_parametros:
+                Toast.makeText(this, "Relatório Parâmetros", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.filtrar_parametros:
+                Toast.makeText(this, "Filtro Parâmetros", Toast.LENGTH_SHORT).show();
+                break;
+        }
+        return true;
     }
 
     class dataListAdapter extends BaseAdapter {
