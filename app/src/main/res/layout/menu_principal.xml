@@ -120,7 +120,8 @@
             android:layout_marginTop="30dp"
             android:contentDescription="@string/btSobre"
             android:adjustViewBounds="false"
-            android:layout_gravity="top"/>
+            android:layout_gravity="top"
+            android:onClick="sobre"/>
 
         <TextView
             android:text="@string/btSobre"

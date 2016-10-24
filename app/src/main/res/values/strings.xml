@@ -17,6 +17,11 @@
     <string name="gerar_relatorio">Gerar relatório</string>
     <string name="filtrar">Filtrar</string>
     <string name="apagar_falhas">Apagar falhas</string>
+    <string name="txt_sobre">Este aplicativo foi desenvovido como um trabalho de graduação.
+        Seu objetivo é auxiliar qualquer pessoa realizar um diagnóstico simples no veículo (Volkswagen
+        Gol 2007).
+    </string>
+    <string name="txt_versao">Versão : 1.0.0</string>
 
 
 

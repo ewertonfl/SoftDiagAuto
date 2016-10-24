@@ -20,24 +20,30 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MenuPrincipal"
+            android:name=".MenuPrincipalView"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".InformacoesVeiculo"
+            android:name=".InformacoesVeiculoView"
             android:label="Informações do veículo"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
         </activity>
         <activity
-            android:name=".Parametros"
+            android:name=".ParametrosView"
             android:label="Parâmetros"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
         </activity>
         <activity
-            android:name=".Falhas"
+            android:name=".FalhasView"
             android:label="Falhas"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme">
+        </activity>
+        <activity
+            android:name=".SobreView"
+            android:label="Sobre"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
         </activity>
