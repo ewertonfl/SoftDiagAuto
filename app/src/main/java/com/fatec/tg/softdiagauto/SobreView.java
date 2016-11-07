@@ -11,7 +11,7 @@ import android.webkit.WebView;
  * Created by Gabriel Rubio on 23/10/2016.
  */
 
-public class SobreView extends AppCompatActivity{
+public class SobreView extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
