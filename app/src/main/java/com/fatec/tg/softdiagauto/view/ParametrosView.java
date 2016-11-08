@@ -1,0 +1,83 @@
+package com.fatec.tg.softdiagauto.view;
+
+import android.app.ActionBar;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.ListView;
+import android.widget.Toast;
+import com.fatec.tg.softdiagauto.util.dataListAdapter;
+import com.fatec.tg.softdiagauto.R;
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
+
+/**
+ * Created by Gabriel Rubio on 19/10/2016.
+ */
+
+public class ParametrosView extends AppCompatActivity {
+
+    ListView l1;
+    String[] t1={"Rotação do motor","Temperatura da água","Tensão da bateria"};
+    String[] d1={"700 Rpm","56 C°","12 V"};
+    Double[] d2 ={700.0,56.0,12.0};
+    Double [] tempo ={0.00,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.010};
+    int[] i1 ={R.drawable.rotacao_motor,R.drawable.termometro,R.drawable.bateria};
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        ActionBar act = getActionBar();
+
+        if(act == null)
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        else
+            act.setDisplayHomeAsUpEnabled(true);
+
+        setContentView(R.layout.activity_parametros);
+        l1=(ListView)findViewById(R.id.listViewParametros);
+        l1.setAdapter(new dataListAdapter(this,t1,d1,i1));
+        gerarGrafico(tempo[0],d2[0]);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_parametros,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                finish();
+                break;
+            case R.id.gerar_relatorio_parametros:
+                Toast.makeText(this, "Relatório Parâmetros", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.filtrar_parametros:
+                Toast.makeText(this, "Filtro Parâmetros", Toast.LENGTH_SHORT).show();
+                break;
+        }
+        return true;
+    }
+
+    public void gerarGrafico(Double tempo,Double valor){
+
+        GraphView graph = (GraphView) findViewById(R.id.graph);
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(
+                new DataPoint[] {
+                        new DataPoint(tempo,valor)
+                });
+        graph.addSeries(series);
+    }
+
+
+}

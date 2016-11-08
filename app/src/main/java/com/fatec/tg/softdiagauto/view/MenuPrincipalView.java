@@ -1,4 +1,4 @@
-package com.fatec.tg.softdiagauto;
+package com.fatec.tg.softdiagauto.view;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -8,10 +8,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.fatec.tg.softdiagauto.R;
 
 public class MenuPrincipalView extends Activity {
     private static final int REQUEST_ENABLE_BT = 27;
@@ -120,7 +123,7 @@ public class MenuPrincipalView extends Activity {
     public void verificarBluetooth() {
         String msg="";
         BluetoothAdapter meuBT = BluetoothAdapter.getDefaultAdapter();
-
+        Log.i("Erick", "Luz");
         //Verificar se o dispositivo suporta a tecnologia Bluetooth.
         if (meuBT == null) {
             msg = "Seu dispositivo Android não suporta a tecnologia Bluetooth!";
@@ -143,6 +146,7 @@ public class MenuPrincipalView extends Activity {
     protected void onActivityResult(int requestCode , int resultCode , Intent data ) {
         if (requestCode == REQUEST_ENABLE_BT) {
             if ( resultCode == RESULT_OK ) {
+
                 iniciarLeitor();
             } else if (resultCode != RESULT_CANCELED) {
                 exibirToast("Ocorreu um erro inesperado ao ligar o serviço Bluetooth!");
@@ -152,7 +156,7 @@ public class MenuPrincipalView extends Activity {
 
     //Chamar Activity para conexão com o Hardware.
     public void iniciarLeitor() {
-        startActivity(new Intent(this,ConexaoHardware.class));
+        startActivity(new Intent(this,ListagemBluetoothView.class));
     }
 
     //Exibir uma mensagem para o usuário, utilizando AlertDialog.

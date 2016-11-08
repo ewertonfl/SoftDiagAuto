@@ -1,4 +1,4 @@
-package com.fatec.tg.softdiagauto;
+package com.fatec.tg.softdiagauto.view;
 
 import android.app.ActionBar;
 import android.os.Bundle;
@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebView;
+
+import com.fatec.tg.softdiagauto.R;
 
 /**
  * Created by Gabriel Rubio on 23/10/2016.

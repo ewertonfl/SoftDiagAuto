@@ -22,7 +22,13 @@
         Gol 2007).
     </string>
     <string name="txt_versao">Versão : 1.0.0</string>
-
+    <string name="btSensor1">Sensor 1</string>
+    <string name="btSensor2">Sensor 2</string>
+    <string name="btSensor3">Sensor 3</string>
+    <string name="btSensor4">Sensor 4</string>
+    <string name="btSensor5">Sensor 5</string>
+    <string name="btSensor6">Sensor 6</string>
+    <string name="btSensor7">Sensor 7</string>
 
 
 

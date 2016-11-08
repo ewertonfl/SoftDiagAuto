@@ -1,21 +1,43 @@
-package com.fatec.tg.softdiagauto;
+package com.fatec.tg.softdiagauto.view;
 
-import android.app.Activity;
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
+import com.fatec.tg.softdiagauto.util.dataListAdapter;
 
-public class ConexaoHardware extends Activity {
+import com.fatec.tg.softdiagauto.R;
+
+public class ListagemBluetoothView extends AppCompatActivity {
+
+    ListView l1;
+    String[] t1={"t1","t2","t3"};
+    String[] d1={"d1","d2","d3"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_parametros);
+        setContentView(R.layout.activity_conexao_hardware);
+
+        ActionBar act = getActionBar();
+
+        if(act == null)
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        else
+            act.setDisplayHomeAsUpEnabled(true);
+
+        int[] icon = {R.drawable.bt_icon_item, R.drawable.bt_icon_item, R.drawable.bt_icon_item};
+        l1=(ListView)findViewById(R.id.listViewBt);
+        l1.setAdapter(new dataListAdapter(this,t1,d1,icon));
+
     }
 
     //Função para exibir um prompt para o usuário digitar o nome.

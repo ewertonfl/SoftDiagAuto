@@ -1,14 +1,16 @@
-package com.fatec.tg.softdiagauto;
+package com.fatec.tg.softdiagauto.view;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.fatec.tg.softdiagauto.R;
+
 /**
  * Created by Gabriel Rubio on 16/10/2016.
  */
 
-public class SplashScreen extends Activity {
+public class SplashScreenView extends Activity {
 
     int cont = 0;
 
@@ -33,7 +35,7 @@ public class SplashScreen extends Activity {
                try{
                     while(cont == 1 || cont <= 5){
 
-                        Thread.sleep(1000);
+                        Thread.sleep(100);
                         cont++;
                     }
                 }catch (InterruptedException e){
@@ -44,7 +46,7 @@ public class SplashScreen extends Activity {
 
                     finish();
 
-                    Intent it = new Intent(SplashScreen.this,MenuPrincipalView.class);
+                    Intent it = new Intent(SplashScreenView.this,MenuPrincipalView.class);
                     startActivity(it);
                     cont++;
                 }
