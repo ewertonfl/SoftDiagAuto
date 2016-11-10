@@ -8,24 +8,27 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.fatec.tg.softdiagauto.model.Sensor;
 import com.fatec.tg.softdiagauto.util.dataListAdapter;
 import com.fatec.tg.softdiagauto.R;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import java.util.ArrayList;
+
 /**
  * Created by Gabriel Rubio on 19/10/2016.
  */
 
-public class ParametrosView extends AppCompatActivity {
+public class ActivityParametros extends AppCompatActivity {
 
     ListView l1;
-    String[] t1={"Rotação do motor","Temperatura da água","Tensão da bateria"};
-    String[] d1={"700 Rpm","56 C°","12 V"};
     Double[] d2 ={700.0,56.0,12.0};
     Double [] tempo ={0.00,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.010};
-    int[] i1 ={R.drawable.rotacao_motor,R.drawable.termometro,R.drawable.bateria};
+
+    ArrayList<Sensor> sensors;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,14 +38,19 @@ public class ParametrosView extends AppCompatActivity {
 
         if(act == null)
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         else
             act.setDisplayHomeAsUpEnabled(true);
 
+        sensors = new ArrayList<>();
+        sensors.add(new Sensor("Rotação do motor","RPM",R.drawable.rotacao_motor,1));
+        sensors.add(new Sensor("Temperatura da água","ºC",R.drawable.termometro,1));
+        sensors.add(new Sensor("Tensão da bateria","V",R.drawable.bateria,1));
+
         setContentView(R.layout.activity_parametros);
         l1=(ListView)findViewById(R.id.listViewParametros);
-        l1.setAdapter(new dataListAdapter(this,t1,d1,i1));
+        l1.setAdapter(new dataListAdapter(this, sensors));
         gerarGrafico(tempo[0],d2[0]);
+
     }
 
     @Override

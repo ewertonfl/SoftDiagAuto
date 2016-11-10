@@ -29,8 +29,11 @@
     <string name="btSensor5">Sensor 5</string>
     <string name="btSensor6">Sensor 6</string>
     <string name="btSensor7">Sensor 7</string>
-
-
-
-
+    <string name="dispositivos_pareados">Dispositivos já pareados</string>
+    <string name="dispositivos_encontrados">Dispositivos encontrados</string>
+    <string name="select_device">Selecione um dispositivo</string>
+    <string name="none_paired">Nenhum dispostivos pareados</string>
+    <string name="none_found">Nenhum dispostivo encontrado</string>
+    <string name="scanning">Buscando dispositivos...</string>
+    <string name="button_scan">Procurar dispositivos</string>
 </resources>

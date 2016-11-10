@@ -13,7 +13,7 @@ import com.fatec.tg.softdiagauto.R;
  * Created by Gabriel Rubio on 23/10/2016.
  */
 
-public class SobreView extends AppCompatActivity {
+public class ActivitySobre extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

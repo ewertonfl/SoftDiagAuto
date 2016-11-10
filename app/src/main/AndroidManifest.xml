@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".view.SplashScreenView"
+            android:name=".view.ActivitySplashScreen"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,35 +20,35 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".view.MenuPrincipalView"
+            android:name=".view.ActivityMenuPrincipal"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".view.InformacoesVeiculoView"
+            android:name=".view.ActivityInformacoesVeiculo"
             android:label="Informações do veículo"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
         </activity>
         <activity
-            android:name=".view.ParametrosView"
+            android:name=".view.ActivityParametros"
             android:label="Parâmetros"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
         </activity>
         <activity
-            android:name=".view.FalhasView"
+            android:name=".view.ActivityFalhas"
             android:label="Falhas"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
         </activity>
         <activity
-            android:name=".view.SobreView"
+            android:name=".view.ActivitySobre"
             android:label="Sobre"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
         </activity>
         <activity
-            android:name=".view.ListagemBluetoothView"
+            android:name=".view.ActivityListagemBluetooth"
             android:label="Conexao"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">

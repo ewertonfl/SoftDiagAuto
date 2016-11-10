@@ -10,7 +10,7 @@ import com.fatec.tg.softdiagauto.R;
  * Created by Gabriel Rubio on 16/10/2016.
  */
 
-public class SplashScreenView extends Activity {
+public class ActivitySplashScreen extends Activity {
 
     int cont = 0;
 
@@ -24,7 +24,7 @@ public class SplashScreenView extends Activity {
 
     public void iniciaSplash(){
 
-        setContentView(R.layout.splash_screen);
+        setContentView(R.layout.activity_splash_screen);
 
 
         new Thread(new Runnable() {
@@ -46,7 +46,7 @@ public class SplashScreenView extends Activity {
 
                     finish();
 
-                    Intent it = new Intent(SplashScreenView.this,MenuPrincipalView.class);
+                    Intent it = new Intent(ActivitySplashScreen.this,ActivityMenuPrincipal.class);
                     startActivity(it);
                     cont++;
                 }

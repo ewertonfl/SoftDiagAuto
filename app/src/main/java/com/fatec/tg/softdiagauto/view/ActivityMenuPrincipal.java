@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import com.fatec.tg.softdiagauto.R;
 
-public class MenuPrincipalView extends Activity {
+public class ActivityMenuPrincipal extends Activity {
     private static final int REQUEST_ENABLE_BT = 27;
     private TextView txtSaudacao;
     final Context context = this;
@@ -24,29 +24,29 @@ public class MenuPrincipalView extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.menu_principal);
+        setContentView(R.layout.activity_menu_principal);
         // this.txtSaudacao=(TextView)findViewById(R.id.txtSaudacao);
         //verificarUsuario();
     }
 
     // Método usado para chamar a tela de informações
     public void informacoesCentral(View v){
-        startActivity(new Intent(this,InformacoesVeiculoView.class));
+        startActivity(new Intent(this,ActivityInformacoesVeiculo.class));
     }
 
     // Método usado para chamar a tela de parâmetros
     public void parametros(View v){
-        startActivity(new Intent(this,ParametrosView.class));
+        startActivity(new Intent(this,ActivityParametros.class));
     }
 
     // Método usado para chamar a tela de falhas
     public void falhas(View v){
-        startActivity(new Intent(this,FalhasView.class));
+        startActivity(new Intent(this,ActivityFalhas.class));
     }
 
     // Método usado para chamar a tela Sobre
     public void sobre(View v){
-        startActivity(new Intent(this,SobreView.class));
+        startActivity(new Intent(this,ActivitySobre.class));
     }
 
     public void confirmarSaida(View v) { // Método para verificar se o usuário deseja realmente sair
@@ -156,7 +156,7 @@ public class MenuPrincipalView extends Activity {
 
     //Chamar Activity para conexão com o Hardware.
     public void iniciarLeitor() {
-        startActivity(new Intent(this,ListagemBluetoothView.class));
+        startActivity(new Intent(this,ActivityListagemBluetooth.class));
     }
 
     //Exibir uma mensagem para o usuário, utilizando AlertDialog.

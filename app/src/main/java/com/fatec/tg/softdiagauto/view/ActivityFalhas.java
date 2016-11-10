@@ -1,6 +1,9 @@
 package com.fatec.tg.softdiagauto.view;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -9,19 +12,22 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fatec.tg.softdiagauto.R;
 
-public class InformacoesVeiculoView extends AppCompatActivity {
+/**
+ * Created by Gabriel Rubio on 21/10/2016.
+ */
 
+public class ActivityFalhas extends AppCompatActivity {
     ListView l1;
-    String[] t1={"Chassi","Número do motor"};
-    String[] d1={"XXXXXXXXXXXXXXXXX","0678°"};
-    int[] i1 ={R.drawable.chassis,R.drawable.motor};
+    String[] t1 = {"P0001", "P0002"};
+    String[] d1 = {"Falha no sensor de aceleração", "Falha no sensor de rotação°"};
+    int[]  i1= {0};
+    final Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,16 +40,17 @@ public class InformacoesVeiculoView extends AppCompatActivity {
         else
             act.setDisplayHomeAsUpEnabled(true);
 
-        setContentView(R.layout.activity_informacoes_veiculo);
-        l1=(ListView)findViewById(R.id.listViewInformacoes);
-        l1.setAdapter(new InformacoesVeiculoView.dataListAdapter(t1,d1,i1));
+        setContentView(R.layout.activity_falhas);
+        l1 = (ListView) findViewById(R.id.listViewFalhas);
+        l1.setAdapter(new ActivityFalhas.dataListAdapter(t1, d1,i1));
+
 
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_informacoes, menu);
+        getMenuInflater().inflate(R.menu.menu_falhas, menu);
         return true;
     }
 
@@ -53,27 +60,52 @@ public class InformacoesVeiculoView extends AppCompatActivity {
             case android.R.id.home:
                 finish();
                 break;
-            case R.id.filtrar_informacoes:
-                Toast.makeText(this, "Filtro informações", Toast.LENGTH_SHORT).show();
+            case R.id.gerar_relatorio_falhas:
+                Toast.makeText(this, "Relatório ActivityFalhas", Toast.LENGTH_SHORT).show();
                 break;
+            case R.id.filtrar_falhas:
+                Toast.makeText(this, "Filtro ActivityFalhas", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.apagar_falhas:
+                Toast.makeText(this, "Apagar falhas", Toast.LENGTH_SHORT).show();
+                break;
+
         }
         return true;
     }
 
+    public void confirmarApagarFalhas(MenuItem item) { // Método para verificar se o usuário deseja apagar as falhas
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+        alertDialogBuilder.setTitle("Apagar falhas");
+        alertDialogBuilder.setMessage("Deseja apagar as falhas?")
+                .setCancelable(false)
+                .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //apagarFalhas();
+                    }
+                }).setNegativeButton("Não",	new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                //action para "não" ou apenas fechar a janela
+                dialog.cancel();
+            }
+        });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
     class dataListAdapter extends BaseAdapter {
         String[] Title, Detail;
-        int[] imge;
+
 
         dataListAdapter() {
             Title = null;
             Detail = null;
-            imge=null;
+
         }
 
-        public dataListAdapter(String[] text, String[] text1,int[] text3) {
+        public dataListAdapter(String[] text, String[] text1, int[] text3) {
             Title = text;
             Detail = text1;
-            imge = text3;
 
         }
 
@@ -96,19 +128,15 @@ public class InformacoesVeiculoView extends AppCompatActivity {
 
             LayoutInflater inflater = getLayoutInflater();
             View row;
-            row = inflater.inflate(R.layout.data_base_adapter, parent, false);
+            row = inflater.inflate(R.layout.activity_list_view, parent, false);
             TextView title, detail;
-            ImageView i1;
             title = (TextView) row.findViewById(R.id.title);
             detail = (TextView) row.findViewById(R.id.detail);
-            i1=(ImageView)row.findViewById(R.id.img);
             title.setText(Title[position]);
             detail.setText(Detail[position]);
-            i1.setImageResource(imge[position]);
+
 
             return (row);
         }
     }
-
-
 }
