@@ -28,12 +28,16 @@ import java.util.Set;
 
 public class ActivityListagemBluetooth extends Activity {
 
-    private static final String TAG = "DeviceListActivity";
     ListView l1;
     String[] t1={"t1","t2","t3"};
     String[] d1={"d1","d2","d3"};
-    public static String EXTRA_DEVICE_ADDRESS = "device_address";
+
+    private static final String TAG = "DeviceListActivity";
+    public static String EXTRA_DEVICE_ADDRESS = "endereco_dispositivo";
+
+     //Dispositivos recentemente encontrados
     private ArrayAdapter<String> mNewDevicesArrayAdapter;
+
     private BluetoothAdapter mBtAdapter;
 
     @Override
@@ -133,12 +137,15 @@ public class ActivityListagemBluetooth extends Activity {
         findViewById(R.id.title_new_devices).setVisibility(View.VISIBLE);
 
         // If we're already discovering, stop it
+
         if (mBtAdapter.isDiscovering()) {
             mBtAdapter.cancelDiscovery();
         }
 
-        // Request discover from BluetoothAdapter
+        // Pedido de busca!
+        Log.i(TAG, "Buscando dispositivos..");
         mBtAdapter.startDiscovery();
+
     }
 
     private AdapterView.OnItemClickListener mDeviceClickListener
@@ -155,9 +162,12 @@ public class ActivityListagemBluetooth extends Activity {
             Intent intent = new Intent();
             intent.putExtra(EXTRA_DEVICE_ADDRESS, address);
 
+            Log.i("ERICK", "Info: " + info + " address: " + address);
+
             // Set result and finish this Activity
             setResult(Activity.RESULT_OK, intent);
             finish();
+
         }
     };
 

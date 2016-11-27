@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="action_settings">Opções</string>
     <string name="alterarNome">Alterar nome</string>
     <string name="testarBluetooth">Teste</string>
@@ -17,7 +17,7 @@
     <string name="gerar_relatorio">Gerar relatório</string>
     <string name="filtrar">Filtrar</string>
     <string name="apagar_falhas">Apagar falhas</string>
-    <string name="txt_sobre">Este aplicativo foi desenvovido como um trabalho de graduação.
+    <string name="txt_sobre">Este aplicativo foi desenvolvido como um trabalho de graduação.
         Seu objetivo é auxiliar qualquer pessoa realizar um diagnóstico simples no veículo (Volkswagen
         Gol 2007).
     </string>
@@ -36,4 +36,11 @@
     <string name="none_found">Nenhum dispostivo encontrado</string>
     <string name="scanning">Buscando dispositivos...</string>
     <string name="button_scan">Procurar dispositivos</string>
+
+    <string name="not_connected">Você não está conectado à um dispositivo</string>
+    <string name="bt_not_enabled_leaving">Bluetooth não está disponivel. O aplicativo será fechado</string>
+    <string name="title_connecting">Conectando...</string>
+    <string name="title_connected_to">Conectado à <xliff:g id="device_name">%1$s</xliff:g></string>
+    <string name="title_not_connected">Desconectado</string>
+    <string name="title_activity_tela_chat">ActivityTelaChat</string>
 </resources>

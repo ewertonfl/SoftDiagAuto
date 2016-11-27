@@ -28,6 +28,13 @@
             android:layout_gravity="top"
             android:onClick="conectarLeitor"/>
 
+        <Button
+            android:text="tela chat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnChat"
+            android:onClick="telaChat"/>
+
         <TextView
             android:text="@string/btConectar"
             android:layout_width="wrap_content"

@@ -19,7 +19,7 @@ package com.fatec.tg.softdiagauto.util;
 /**
  * Defines several constants used between {@link BluetoothService} and the UI.
  */
-public interface Constants {
+public interface Constantes {
 
     // Message types sent from the BluetoothService Handler
     public static final int MESSAGE_STATE_CHANGE = 1;

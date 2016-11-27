@@ -15,12 +15,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fatec.tg.softdiagauto.R;
+import com.fatec.tg.softdiagauto.util.BluetoothDiag;
 
 public class ActivityMenuPrincipal extends Activity {
-    private static final int REQUEST_ENABLE_BT = 27;
+    private static final int PEDIDO_CONEXAO_SEGURA = 1;
+    private static final int PEDIDO_CONEXAO_INSEGURA = 2;
+    private static final int PEDIDO_HABILITAR_BT = 3;
     private TextView txtSaudacao;
     final Context context = this;
-
+    BluetoothDiag bt;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +35,10 @@ public class ActivityMenuPrincipal extends Activity {
     // Método usado para chamar a tela de informações
     public void informacoesCentral(View v){
         startActivity(new Intent(this,ActivityInformacoesVeiculo.class));
+    }
+
+    public void telaChat(View v){
+        startActivity(new Intent(this,ActivityTelaChat.class));
     }
 
     // Método usado para chamar a tela de parâmetros
@@ -116,14 +123,8 @@ public class ActivityMenuPrincipal extends Activity {
 
     //Função para inicio da conexão com o leitor.
     public void conectarLeitor(View v) {
-        verificarBluetooth();
-    }
-
-    //Função para verificar o status do serviço Bluetooth.
-    public void verificarBluetooth() {
         String msg="";
         BluetoothAdapter meuBT = BluetoothAdapter.getDefaultAdapter();
-        Log.i("Erick", "Luz");
         //Verificar se o dispositivo suporta a tecnologia Bluetooth.
         if (meuBT == null) {
             msg = "Seu dispositivo Android não suporta a tecnologia Bluetooth!";
@@ -131,9 +132,13 @@ public class ActivityMenuPrincipal extends Activity {
             if (!(meuBT.isEnabled())) {
                 msg = "É necessário ligar o serviço Bluetooth!";
                 Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                startActivityForResult (enableBtIntent, REQUEST_ENABLE_BT);
+                startActivityForResult (enableBtIntent, PEDIDO_HABILITAR_BT);
             } else {
-                iniciarLeitor();
+                configurarLeitor();
+
+                Log.i("MAIN","Listar BT");
+                Intent serverIntent = new Intent(this, ActivityListagemBluetooth.class);
+                startActivityForResult(serverIntent, PEDIDO_CONEXAO_SEGURA);
             }
         }
 
@@ -142,21 +147,40 @@ public class ActivityMenuPrincipal extends Activity {
         }
     }
 
-    //Verificar o retorno da Activity.
-    protected void onActivityResult(int requestCode , int resultCode , Intent data ) {
-        if (requestCode == REQUEST_ENABLE_BT) {
-            if ( resultCode == RESULT_OK ) {
 
-                iniciarLeitor();
-            } else if (resultCode != RESULT_CANCELED) {
-                exibirToast("Ocorreu um erro inesperado ao ligar o serviço Bluetooth!");
-            }
-        }
+    public void configurarLeitor(){
+        Log.i("MAIN", "CONFIGURAÇÃO BT");
+        bt = new BluetoothDiag(this);
+
     }
 
-    //Chamar Activity para conexão com o Hardware.
-    public void iniciarLeitor() {
-        startActivity(new Intent(this,ActivityListagemBluetooth.class));
+    //Verificar o retorno da Activity.
+    protected void onActivityResult(int requestCode , int resultCode , Intent data ) {
+        switch (requestCode) {
+            case PEDIDO_CONEXAO_SEGURA:
+                // When DeviceListActivity returns with a device to connect
+                if (resultCode == Activity.RESULT_OK) {
+                    bt.conectarDispositivo(data, true);
+                }
+                break;
+            case PEDIDO_CONEXAO_INSEGURA:
+                // When DeviceListActivity returns with a device to connect
+                if (resultCode == Activity.RESULT_OK) {
+                    bt.conectarDispositivo(data, false);
+                }
+                break;
+            case PEDIDO_HABILITAR_BT:
+                // When the request to enable Bluetooth returns
+                if (resultCode == Activity.RESULT_OK) {
+                    // Bluetooth is now enabled, so set up a chat session
+                    configurarLeitor();
+
+                } else {
+                    // User did not enable Bluetooth or an error occurred
+                    Log.d("MAIN", "BT não habilitado");
+                    exibirToast("Erro ao Habilitar o bluetooth");
+                }
+        }
     }
 
     //Exibir uma mensagem para o usuário, utilizando AlertDialog.

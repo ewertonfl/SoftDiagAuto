@@ -45,6 +45,7 @@ public class ActivityFalhas extends AppCompatActivity {
         l1.setAdapter(new ActivityFalhas.dataListAdapter(t1, d1,i1));
 
 
+
     }
 
     @Override
