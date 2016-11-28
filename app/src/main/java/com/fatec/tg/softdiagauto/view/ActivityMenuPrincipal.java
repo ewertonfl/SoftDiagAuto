@@ -3,6 +3,7 @@ package com.fatec.tg.softdiagauto.view;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -138,7 +139,7 @@ public class ActivityMenuPrincipal extends Activity {
 
                 Log.i("MAIN","Listar BT");
                 Intent serverIntent = new Intent(this, ActivityListagemBluetooth.class);
-                startActivityForResult(serverIntent, PEDIDO_CONEXAO_SEGURA);
+                startActivityForResult(serverIntent, PEDIDO_CONEXAO_INSEGURA);
             }
         }
 
@@ -148,10 +149,9 @@ public class ActivityMenuPrincipal extends Activity {
     }
 
 
-    public void configurarLeitor(){
+    public void configurarLeitor() {
         Log.i("MAIN", "CONFIGURAÇÃO BT");
         bt = new BluetoothDiag(this);
-
     }
 
     //Verificar o retorno da Activity.

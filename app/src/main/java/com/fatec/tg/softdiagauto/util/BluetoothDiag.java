@@ -140,7 +140,7 @@ public class BluetoothDiag {
                     // save the connected device's name
                     mNomeDispositivo = msg.getData().getString(Constantes.DEVICE_NAME);
                     if (null != activity) {
-                        Toast.makeText(activity, "Conecatado à "
+                        Toast.makeText(activity, "Conectado à "
                                 + mNomeDispositivo, Toast.LENGTH_SHORT).show();
                     }
                     break;

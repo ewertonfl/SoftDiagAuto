@@ -64,15 +64,14 @@ public class ActivityListagemBluetooth extends Activity {
             }
         });
 
-        listarDispostivosBluetooth();
+        listarDispositivosBluetooth();
 
-       /** int[] icon = {R.drawable.bt_icon_item_1, R.drawable.bt_icon_item_1, R.drawable.bt_icon_item_1};
-        l1=(ListView)findViewById(R.id.listViewBtPareados);
+       /** int[] icon = {R.drawable.bt_icon_item_1, R.drawabstart
         l1.setAdapter(new dataListAdapter(this,t1,d1,icon));**/
 
     }
 
-    public void listarDispostivosBluetooth(){
+    public void listarDispositivosBluetooth(){
 
         ArrayAdapter<String> pairedDevicesArrayAdapter = new ArrayAdapter<String>(this, R.layout.activity_device_name);
         mNewDevicesArrayAdapter = new ArrayAdapter<String>(this, R.layout.activity_device_name);

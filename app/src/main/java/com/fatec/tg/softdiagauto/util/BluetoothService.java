@@ -208,7 +208,8 @@ public class BluetoothService {
         // Send a failure message back to the Activity
         Message msg = mHandler.obtainMessage(Constantes.MESSAGE_TOAST);
         Bundle bundle = new Bundle();
-        bundle.putString(Constantes.TOAST, "Não foi possível se conectar ao dispositivo!");
+        bundle.putString(Constantes.TOAST, "Não foi possível se conectar ao dispositivo!" + msg);
+        Log.i("BT",msg.toString());
         msg.setData(bundle);
         mHandler.sendMessage(msg);
 
@@ -325,6 +326,14 @@ public class BluetoothService {
             } catch (IOException e) {
                 Log.e(TAG, "Socket Type: " + mSocketType + "create() failed", e);
             }
+
+            try {
+                tmp.connect();
+                Log.e("","Connected");
+            } catch (IOException e) {
+                Log.e("",e.getMessage());
+            }
+
             mmSocket = tmp;
         }
 
@@ -342,15 +351,31 @@ public class BluetoothService {
                 mmSocket.connect();
             } catch (IOException e) {
                 // Close the socket
+
+                try {
+                    Log.e("","trying fallback...");
+//
+                    BluetoothDevice mmDevice2=mmDevice;
+                    BluetoothSocket mmSocket2 = null;
+                    mmSocket2 =(BluetoothSocket) mmDevice2.getClass().getMethod("createInsecureRfcommSocket", new Class[] {int.class}).invoke(mmDevice2,1);
+                    mmSocket2.connect();
+
+                    Log.e("","Connected");
+                }
+                catch (Exception e2) {
+                    Log.e("", "Couldn't establish Bluetooth connection!");
+                }
+
                 try {
                     mmSocket.close();
                 } catch (IOException e2) {
                     Log.e(TAG, "unable to close() " + mSocketType +
                             " socket during connection failure", e2);
                 }
-                connectionFailed();
-                Log.i(TAG, "ERRO AO CONECTAR BT: " + e.getMessage());
-                return;
+
+               // connectionFailed();
+              //  Log.i(TAG, "ERRO AO CONECTAR BT: " + e.getMessage());
+                //return;
             }
 
             // Reset the ConnectThread because we're done
