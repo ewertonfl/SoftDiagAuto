@@ -3,6 +3,7 @@ package com.fatec.tg.softdiagauto.view;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
 import com.fatec.tg.softdiagauto.util.BluetoothDiag;
@@ -28,7 +29,7 @@ public class ActivityTelaChat extends Activity {
         edtChat = (EditText) findViewById(R.id.txtChat);
     }
 
-    public void onBtnTxClick(){
+    public void onBtnTxClick(View v){
         String vlr = edtTx.getText().toString();
         bt.enviarValor(vlr);
         Log.i("TELA", "Valor enviado: " + vlr);

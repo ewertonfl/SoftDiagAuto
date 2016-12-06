@@ -373,9 +373,9 @@ public class BluetoothService {
                             " socket during connection failure", e2);
                 }
 
-               // connectionFailed();
-              //  Log.i(TAG, "ERRO AO CONECTAR BT: " + e.getMessage());
-                //return;
+                connectionFailed();
+                Log.i(TAG, "ERRO AO CONECTAR BT: " + e.getMessage());
+                return;
             }
 
             // Reset the ConnectThread because we're done
