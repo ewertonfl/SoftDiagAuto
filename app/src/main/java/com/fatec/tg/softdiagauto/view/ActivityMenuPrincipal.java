@@ -1,37 +1,141 @@
 package com.fatec.tg.softdiagauto.view;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
-
 import com.fatec.tg.softdiagauto.R;
+import com.fatec.tg.softdiagauto.controller.Controller;
 import com.fatec.tg.softdiagauto.util.BluetoothDiag;
+import com.fatec.tg.softdiagauto.util.BluetoothService;
+
+import java.io.Serializable;
 
 public class ActivityMenuPrincipal extends Activity {
-    private static final int PEDIDO_CONEXAO_SEGURA = 1;
-    private static final int PEDIDO_CONEXAO_INSEGURA = 2;
-    private static final int PEDIDO_HABILITAR_BT = 3;
-    private TextView txtSaudacao;
     final Context context = this;
-    BluetoothDiag bt;
+    private BluetoothAdapter BA;
+    private final String nomeDispositivo = "SoftDiag"; //Nome do módulo Bluetooth.
+    private final int REQUEST_ENABLE_BT = 1; // Código padrão para o requerimento em tempo de execuxão.
+    private BluetoothService conexao;
+    private IntentFilter it = null;
+    private final String[] PermissionsLocation = {Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION}; //Array de permissões relacionadas ao Bluetooth no Android 6.0 ou maior
+    private final int ResquestLocationId = 0; // Código padrão para o requerimento em tempo de execução.
+    public BluetoothDiag rData;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_principal);
-        // this.txtSaudacao=(TextView)findViewById(R.id.txtSaudacao);
-        //verificarUsuario();
+
+        while(true) {
+            it = new IntentFilter(); // Instancia o filtro declarado logo após o onCreate().
+            it.addAction(BluetoothDevice.ACTION_FOUND);
+            it.addCategory(Intent.CATEGORY_DEFAULT);
+            registerReceiver(mReceiver, it); // Registra um Receiver para o App.
+            break;
+        }
+
+        BA = BluetoothAdapter.getDefaultAdapter();
+        BtEnable();
+
+        Controller controller = new Controller();
+
     }
+
+    public void conectarLeitor(View v){
+        lookFor();
+    }
+
+    IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            // Quando a ação "discover" achar um dispositivo
+            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                try{
+                    if(device.getName().trim().equals(nomeDispositivo)) {
+                        conexao = BluetoothService.getInstance(device, true);
+
+                        if(conexao.isConnected()) {
+                            Toast.makeText(ActivityMenuPrincipal.this, "Conectado com sucesso ao dispositivo " + device.getName(), Toast.LENGTH_SHORT).show();
+                            changeActivity(); // chama a BluetoothDiag
+                        }
+                    }
+
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }else{
+                Toast.makeText(ActivityMenuPrincipal.this, "Erro na tentativa de se conectar", Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
+
+
+
+    private void changeActivity() {
+        /*Intent i = new Intent(this,BluetoothDiag.class);
+        startActivity(i);*/
+
+        rData = new BluetoothDiag(this);
+
+        //Toast.makeText(ActivitySplashScreen.this, "Receive instanciado!", Toast.LENGTH_SHORT).show();
+    }
+
+    public void BtEnable(){
+        //liga o bluetooth
+        if (!BA.isEnabled()) {
+            Intent turnOn = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(turnOn, REQUEST_ENABLE_BT);
+            Log.i("MAIN", "Ligando BT");
+            while (!BA.isEnabled()) {
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException ex) {
+                }
+
+            }
+            Log.i("MAIN", "BT Ligado!");
+
+            lookFor();
+
+        } else {
+            lookFor();
+        }
+        // Essa if em especial, verifica se a versão Android é 6.0 ou maior, pois caso seja, uma permissão para localização, além das relacionadas ao Bluetooth, sao necessárias.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if(checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+                requestPermissions(PermissionsLocation,ResquestLocationId);
+            }
+        }
+    }
+
+    protected void lookFor() { // Procura por dispositivos
+        Log.i("MAIN", "Procurando DISPOSITIVO!!");
+        Toast.makeText(ActivityMenuPrincipal.this, "Procurando dispositivo", Toast.LENGTH_SHORT).show();
+        if(BA.startDiscovery()){}
+        else
+            ;
+    }
+
+
+
 
     // Método usado para chamar a tela de informações
     public void informacoesCentral(View v){
@@ -39,7 +143,13 @@ public class ActivityMenuPrincipal extends Activity {
     }
 
     public void telaChat(View v){
-        startActivity(new Intent(this,ActivityTelaChat.class));
+        Intent chat = new Intent(this,ActivityTelaChat.class);
+
+        Bundle args = new Bundle();
+        args.putSerializable("BT", rData);
+        chat.putExtra("ARGS", args);
+        Log.i("MAIN", "Start activity");
+        startActivity(chat);
     }
 
     // Método usado para chamar a tela de parâmetros
@@ -84,7 +194,7 @@ public class ActivityMenuPrincipal extends Activity {
         if (nome=="") {
             perguntarNome();
         } else {
-            txtSaudacao.setText("Bem vindo, " + nome + "!");
+            //txtSaudacao.setText("Bem vindo, " + nome + "!");
         }
     }
 
@@ -106,14 +216,13 @@ public class ActivityMenuPrincipal extends Activity {
                     SharedPreferences.Editor editor=pref.edit();
                     editor.putString("Nome", nome);
                     editor.commit();
-                    txtSaudacao.setText("Bem vindo, " + nome + "!");
+
                 }
             }
         });
         inputAlert.create().show();
     }
 
-    //Fun��o para alterar o nome do usu�rio.
     public void alterarNome() {
         SharedPreferences pref = getSharedPreferences("AppConfig", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=pref.edit();
@@ -122,66 +231,6 @@ public class ActivityMenuPrincipal extends Activity {
         perguntarNome();
     }
 
-    //Função para inicio da conexão com o leitor.
-    public void conectarLeitor(View v) {
-        String msg="";
-        BluetoothAdapter meuBT = BluetoothAdapter.getDefaultAdapter();
-        //Verificar se o dispositivo suporta a tecnologia Bluetooth.
-        if (meuBT == null) {
-            msg = "Seu dispositivo Android não suporta a tecnologia Bluetooth!";
-        } else {
-            if (!(meuBT.isEnabled())) {
-                msg = "É necessário ligar o serviço Bluetooth!";
-                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                startActivityForResult (enableBtIntent, PEDIDO_HABILITAR_BT);
-            } else {
-                configurarLeitor();
-
-                Log.i("MAIN","Listar BT");
-                Intent serverIntent = new Intent(this, ActivityListagemBluetooth.class);
-                startActivityForResult(serverIntent, PEDIDO_CONEXAO_INSEGURA);
-            }
-        }
-
-        if(msg.length() > 0) {
-            exibirToast(msg);
-        }
-    }
-
-
-    public void configurarLeitor() {
-        Log.i("MAIN", "CONFIGURAÇÃO BT");
-        bt = new BluetoothDiag(this);
-    }
-
-    //Verificar o retorno da Activity.
-    protected void onActivityResult(int requestCode , int resultCode , Intent data ) {
-        switch (requestCode) {
-            case PEDIDO_CONEXAO_SEGURA:
-                // When DeviceListActivity returns with a device to connect
-                if (resultCode == Activity.RESULT_OK) {
-                    bt.conectarDispositivo(data, true);
-                }
-                break;
-            case PEDIDO_CONEXAO_INSEGURA:
-                // When DeviceListActivity returns with a device to connect
-                if (resultCode == Activity.RESULT_OK) {
-                    bt.conectarDispositivo(data, false);
-                }
-                break;
-            case PEDIDO_HABILITAR_BT:
-                // When the request to enable Bluetooth returns
-                if (resultCode == Activity.RESULT_OK) {
-                    // Bluetooth is now enabled, so set up a chat session
-                    configurarLeitor();
-
-                } else {
-                    // User did not enable Bluetooth or an error occurred
-                    Log.d("MAIN", "BT não habilitado");
-                    exibirToast("Erro ao Habilitar o bluetooth");
-                }
-        }
-    }
 
     //Exibir uma mensagem para o usuário, utilizando AlertDialog.
     public void exibirAlerta(String msg) {

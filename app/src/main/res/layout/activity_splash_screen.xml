@@ -27,4 +27,15 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
+    <TextView
+        android:text="Inicializando aplicativo..."
+        android:textSize="22dp"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:id="@+id/txtStatus"
+        android:layout_above="@+id/progressBar3"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>

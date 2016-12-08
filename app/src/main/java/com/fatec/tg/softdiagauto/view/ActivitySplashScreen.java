@@ -3,6 +3,7 @@ package com.fatec.tg.softdiagauto.view;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import com.fatec.tg.softdiagauto.R;
 
@@ -12,19 +13,28 @@ import com.fatec.tg.softdiagauto.R;
 
 public class ActivitySplashScreen extends Activity {
 
+
+    TextView txtStatus;
+
     int cont = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_splash_screen);
+
+
 
 
         iniciaSplash();
     }
 
+
+
+
     public void iniciaSplash(){
 
-        setContentView(R.layout.activity_splash_screen);
+
 
 
         new Thread(new Runnable() {
@@ -44,9 +54,13 @@ public class ActivitySplashScreen extends Activity {
 
                 if(cont == 6){
 
+
+
+
                     finish();
 
                     Intent it = new Intent(ActivitySplashScreen.this,ActivityMenuPrincipal.class);
+
                     startActivity(it);
                     cont++;
                 }
