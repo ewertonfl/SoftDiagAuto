@@ -13,11 +13,12 @@ import com.fatec.tg.softdiagauto.util.BluetoothDiag;
 
 import java.io.Serializable;
 
+import static com.fatec.tg.softdiagauto.util.Constantes.rData;
+
 public class ActivityTelaChat extends Activity {
 
     EditText edtTx;
     EditText edtChat;
-    BluetoothDiag bt;
     ListView l1;
     String[] t1 = {"P0001", "P0002"};
     String[] d1 = {"Falha no sensor de aceleração", "Falha no sensor de rotação°"};
@@ -27,29 +28,39 @@ public class ActivityTelaChat extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tela_chat);
-        Log.i("TelaCHAT", "Entro aqui!");
+
         edtTx = (EditText) findViewById(R.id.txtTX);
         edtChat = (EditText) findViewById(R.id.txtChat);
-        Bundle args = getIntent().getBundleExtra("ARGS");
-        if (args != null){
-            Log.i("TelaCHAT", "Parametro recebido!");
-            bt = (BluetoothDiag) args.getSerializable("BT");
+
+        if (rData != null){
+            Log.i("CHAT", "Software já conectado!");
         }
 
-        /*new Thread(new Runnable() { // Thread recebe!
+        new Thread(new Runnable() { // Thread recebe!
             @Override
             public void run() {
-                if (bt.getRxSize() > 0) {
-                    edtChat.setText(edtChat.getText() + "\n<" + bt.getRx());
-                    Log.i("TELA", "Valor recebido: " + bt.getRx());
+                Log.i("CHAT", "Start THREAD de recepção!");
+
+                while (true) {
+                    if (rData.getRxSize() > 0) {
+                        Log.i("CHAT", "Start THREAD de recepção!");
+                        String vlr = rData.getRx();
+                        setTextoChat(vlr);
+                        Log.i("TELA", "Valor recebido: " + vlr);
+                    }
                 }
             }
-        }).start();*/
+        }).start();
+    }
+
+    public void setTextoChat(String vlr){
+        edtChat.setText(edtChat.getText() + "\n<" + vlr);
     }
 
     public void onBtnTxClick(View v){
+
         String vlr = edtTx.getText().toString();
-        bt.tx(vlr);
+        rData.tx(vlr);
         Log.i("TELA", "Valor enviado: " + vlr);
         edtChat.setText(edtChat.getText() + "\n>" + vlr);
     }

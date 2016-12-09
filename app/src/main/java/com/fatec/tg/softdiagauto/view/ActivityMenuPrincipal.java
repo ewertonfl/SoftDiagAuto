@@ -19,22 +19,21 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 import com.fatec.tg.softdiagauto.R;
-import com.fatec.tg.softdiagauto.controller.Controller;
+import com.fatec.tg.softdiagauto.controller.Diagnostico;
 import com.fatec.tg.softdiagauto.util.BluetoothDiag;
 import com.fatec.tg.softdiagauto.util.BluetoothService;
+import com.fatec.tg.softdiagauto.util.Constantes;
 
-import java.io.Serializable;
+import static com.fatec.tg.softdiagauto.util.Constantes.rData;
 
 public class ActivityMenuPrincipal extends Activity {
     final Context context = this;
     private BluetoothAdapter BA;
-    private final String nomeDispositivo = "SoftDiag"; //Nome do módulo Bluetooth.
     private final int REQUEST_ENABLE_BT = 1; // Código padrão para o requerimento em tempo de execuxão.
-    private BluetoothService conexao;
-    private IntentFilter it = null;
     private final String[] PermissionsLocation = {Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION}; //Array de permissões relacionadas ao Bluetooth no Android 6.0 ou maior
     private final int ResquestLocationId = 0; // Código padrão para o requerimento em tempo de execução.
-    public BluetoothDiag rData;
+    private IntentFilter it = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,20 +44,19 @@ public class ActivityMenuPrincipal extends Activity {
             it = new IntentFilter(); // Instancia o filtro declarado logo após o onCreate().
             it.addAction(BluetoothDevice.ACTION_FOUND);
             it.addCategory(Intent.CATEGORY_DEFAULT);
-            registerReceiver(mReceiver, it); // Registra um Receiver para o App.
+            context.registerReceiver(mReceiver, it); // Registra um Receiver para o App.
             break;
         }
 
+
         BA = BluetoothAdapter.getDefaultAdapter();
         BtEnable();
-
-        Controller controller = new Controller();
-
+        Diagnostico diag = new Diagnostico(this);
+        diag.execute();
     }
 
-    public void conectarLeitor(View v){
-        lookFor();
-    }
+
+    private BluetoothService conexao;
 
     IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -69,12 +67,12 @@ public class ActivityMenuPrincipal extends Activity {
 
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 try{
-                    if(device.getName().trim().equals(nomeDispositivo)) {
+                    if(device.getName().trim().equals(Constantes.nomeDispositivo)) {
                         conexao = BluetoothService.getInstance(device, true);
 
                         if(conexao.isConnected()) {
-                            Toast.makeText(ActivityMenuPrincipal.this, "Conectado com sucesso ao dispositivo " + device.getName(), Toast.LENGTH_SHORT).show();
-                            changeActivity(); // chama a BluetoothDiag
+                            Toast.makeText(context, "Conectado com sucesso ao dispositivo " + device.getName(), Toast.LENGTH_SHORT).show();
+                            instanciaValor();
                         }
                     }
 
@@ -82,20 +80,17 @@ public class ActivityMenuPrincipal extends Activity {
                     e.printStackTrace();
                 }
             }else{
-                Toast.makeText(ActivityMenuPrincipal.this, "Erro na tentativa de se conectar", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Erro na tentativa de se conectar", Toast.LENGTH_SHORT).show();
             }
         }
     };
 
-
-
-    private void changeActivity() {
-        /*Intent i = new Intent(this,BluetoothDiag.class);
-        startActivity(i);*/
-
+    public void instanciaValor(){
         rData = new BluetoothDiag(this);
+    }
 
-        //Toast.makeText(ActivitySplashScreen.this, "Receive instanciado!", Toast.LENGTH_SHORT).show();
+    public void conectarLeitor(View v){
+        lookFor();
     }
 
     public void BtEnable(){
@@ -134,9 +129,6 @@ public class ActivityMenuPrincipal extends Activity {
             ;
     }
 
-
-
-
     // Método usado para chamar a tela de informações
     public void informacoesCentral(View v){
         startActivity(new Intent(this,ActivityInformacoesVeiculo.class));
@@ -144,11 +136,6 @@ public class ActivityMenuPrincipal extends Activity {
 
     public void telaChat(View v){
         Intent chat = new Intent(this,ActivityTelaChat.class);
-
-        Bundle args = new Bundle();
-        args.putSerializable("BT", rData);
-        chat.putExtra("ARGS", args);
-        Log.i("MAIN", "Start activity");
         startActivity(chat);
     }
 

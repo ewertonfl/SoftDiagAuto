@@ -1,10 +1,15 @@
 package com.fatec.tg.softdiagauto.util;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.util.Log;
 import android.widget.Toast;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,18 +31,20 @@ public class BluetoothDiag implements Serializable{
     private ArrayList<String> rx;
     private static String TAG = "BluetoothDiag";
 
+
     private BluetoothService connection = BluetoothService.getInstance(null, false);
 
     public BluetoothDiag(Activity context){
 
         this.context = context;
+        rx = new ArrayList<String> ();
+
         mmSocket = connection.getConection();
 
         try {
             mmOutputStream = mmSocket.getOutputStream();
             mmInputStream = mmSocket.getInputStream();
             //mmOutputStream.write("AT".getBytes());
-
 
             beginListenForData();
             //mmOutputStream.write("OK".getBytes());
@@ -47,6 +54,9 @@ public class BluetoothDiag implements Serializable{
             e.printStackTrace();
         }
     }
+
+
+
 
     public void tx(String vlr){
         try{
@@ -97,6 +107,8 @@ public class BluetoothDiag implements Serializable{
     }
 
     public int getRxSize(){
+        if (rx == null)
+            return 0;
         return rx.size();
     }
 

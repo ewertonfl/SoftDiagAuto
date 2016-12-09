@@ -16,20 +16,17 @@
 
 package com.fatec.tg.softdiagauto.util;
 
+import android.content.BroadcastReceiver;
+
 /**
  * Defines several constants used between {@link BluetoothService} and the UI.
  */
-public interface Constantes {
+public class Constantes {
 
-    // Message types sent from the BluetoothService Handler
-    public static final int MESSAGE_STATE_CHANGE = 1;
-    public static final int MESSAGE_READ = 2;
-    public static final int MESSAGE_WRITE = 3;
-    public static final int MESSAGE_DEVICE_NAME = 4;
-    public static final int MESSAGE_TOAST = 5;
+    //Variavel de referência de memória para controlar a conexão bluetooth
+    public static BluetoothDiag rData = null;
+    public static final String nomeDispositivo = "SoftDiag"; //Nome do módulo Bluetooth.
 
-    // Key names received from the BluetoothService Handler
-    public static final String DEVICE_NAME = "activity_device_name";
-    public static final String TOAST = "toast";
+
 
 }
