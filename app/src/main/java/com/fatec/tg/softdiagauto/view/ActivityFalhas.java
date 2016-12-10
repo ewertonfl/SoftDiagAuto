@@ -4,6 +4,9 @@ import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.icu.text.DateFormat;
+import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -18,6 +21,10 @@ import android.widget.Toast;
 
 import com.fatec.tg.softdiagauto.R;
 
+import java.sql.Time;
+import java.util.Calendar;
+import java.util.Date;
+
 /**
  * Created by Gabriel Rubio on 21/10/2016.
  */
@@ -26,6 +33,7 @@ public class ActivityFalhas extends AppCompatActivity {
     ListView l1;
     String[] t1 = {"P0001", "P0002"};
     String[] d1 = {"Falha no sensor de aceleração", "Falha no sensor de rotação°"};
+    String textoRel = "";
     int[]  i1= {0};
     final Context context = this;
 
@@ -43,9 +51,6 @@ public class ActivityFalhas extends AppCompatActivity {
         setContentView(R.layout.activity_falhas);
         l1 = (ListView) findViewById(R.id.listViewFalhas);
         l1.setAdapter(new ActivityFalhas.dataListAdapter(t1, d1,i1));
-
-
-
     }
 
     @Override
@@ -62,11 +67,11 @@ public class ActivityFalhas extends AppCompatActivity {
                 finish();
                 break;
             case R.id.gerar_relatorio_falhas:
-                Toast.makeText(this, "Relatório ActivityFalhas", Toast.LENGTH_SHORT).show();
+                gerarRelatorio();
                 break;
-            case R.id.filtrar_falhas:
-                Toast.makeText(this, "Filtro ActivityFalhas", Toast.LENGTH_SHORT).show();
-                break;
+//            case R.id.filtrar_falhas:
+//                Toast.makeText(this, "Filtro ActivityFalhas", Toast.LENGTH_SHORT).show();
+//                break;
             case R.id.apagar_falhas:
                 Toast.makeText(this, "Apagar falhas", Toast.LENGTH_SHORT).show();
                 break;
@@ -92,6 +97,36 @@ public class ActivityFalhas extends AppCompatActivity {
         });
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
+    }
+
+    public void gerarRelatorio() {
+        for(int i = 0; i < this.t1.length; i++) {
+            textoRel+=this.t1[i] + ": " +  this.d1[i] + "\n";
+        }
+
+        String[] dth = horarioAtual().split(" ");
+        textoRel="\nLista de falhas: \n"+textoRel;
+        textoRel="Horário emissão: "+dth[1]+" \n"+textoRel;
+        textoRel="Data emissão: "+dth[0]+" \n"+textoRel;
+        Intent i = new Intent(Intent.ACTION_SEND);
+        i.setType("message/rfc822");
+        //i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"ewerton.oliveira@kplay.com.br"});
+        i.putExtra(Intent.EXTRA_SUBJECT, "Relatório de falhas.");
+        i.putExtra(Intent.EXTRA_TEXT   , textoRel);
+        try {
+            startActivity(Intent.createChooser(i, "Salvar relatório de falhas."));
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(ActivityFalhas.this, "Não há cliente de email instalado.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public String horarioAtual() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        Date data = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(data);
+        Date data_atual = cal.getTime();
+        return dateFormat.format(data_atual);
     }
 
     class dataListAdapter extends BaseAdapter {
