@@ -8,12 +8,31 @@
         android:icon="@drawable/relatorio"
         android:title="@string/gerar_relatorio"
         app:showAsAction="always"/>
+
     <item
         android:id="@+id/filtrar_falhas"
         android:orderInCategory="100"
         android:icon="@drawable/filtrar"
         android:title="@string/filtrar"
-        app:showAsAction="always"/>
+        android:checkableBehavior="all"
+        app:showAsAction="always">
+        <!--<menu>-->
+            <!--<group android:checkableBehavior="all">-->
+                <!--<item android:id="@+id/item1"-->
+                    <!--android:titleCondensed="Options"-->
+                    <!--android:title="Highlight Options"-->
+                    <!--android:icon="@android:drawable/ic_menu_preferences">-->
+                <!--</item>-->
+                <!--<item android:id="@+id/item2"-->
+                    <!--android:titleCondensed="Persist"-->
+                    <!--android:title="Persist"-->
+                    <!--android:icon="@android:drawable/ic_menu_preferences"-->
+                    <!--android:checkable="true">-->
+                <!--</item>-->
+            <!--</group>-->
+        <!--</menu>-->
+    </item>
+
 
     <item
         android:id="@+id/apagar_falhas"
