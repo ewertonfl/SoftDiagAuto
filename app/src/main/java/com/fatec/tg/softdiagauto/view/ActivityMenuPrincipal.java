@@ -3,6 +3,7 @@ package com.fatec.tg.softdiagauto.view;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -12,11 +13,13 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.fatec.tg.softdiagauto.R;
 import com.fatec.tg.softdiagauto.controller.Diagnostico;
@@ -38,11 +41,16 @@ public class ActivityMenuPrincipal extends Activity {
     private IntentFilter it = null;
     private boolean procurar = true;
     private boolean conectado = false;
+    ProgressDialog pg;
+    private TextView statusPrototipo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_principal);
+        this.statusPrototipo=(TextView)findViewById(R.id.statusConector);
+        this.statusPrototipo.setText(" NÃO CONECTADO");
+        this.statusPrototipo.setTextColor(Color.RED);
 
         while(true) {
             it = new IntentFilter(); // Instancia o filtro declarado logo após o onCreate().
@@ -82,13 +90,17 @@ public class ActivityMenuPrincipal extends Activity {
                                 Toast.makeText(context, "Conectado com sucesso ao dispositivo!" + device.getName(), Toast.LENGTH_SHORT).show();
                                 instanciaValor();
                                 conectado=true;
+                                pg.dismiss();
+                                statusPrototipo=(TextView)findViewById(R.id.statusConector);
+                                statusPrototipo.setText(" CONECTADO");
+                                statusPrototipo.setTextColor(Color.GREEN);
                             } else {
                                 conectado=false;
                                 procurar=false;
                                 Toast.makeText(context, "Falha ao conectar ao dispositivo." + device.getName(), Toast.LENGTH_SHORT).show();
-                                if (BA.isEnabled()) {
-                                    BA.disable();
-                                }
+                                statusPrototipo=(TextView)findViewById(R.id.statusConector);
+                                statusPrototipo.setText(" NÃO CONECTADO");
+                                statusPrototipo.setTextColor(Color.RED);
                             }
                         }
                     }catch (Exception e) {
@@ -112,8 +124,12 @@ public class ActivityMenuPrincipal extends Activity {
     }
 
     public void conectarLeitor(View v){
-        if (!BA.isEnabled())
+        if (!BA.isEnabled()) {
+            statusPrototipo=(TextView)findViewById(R.id.statusConector);
+            statusPrototipo.setText(" NÃO CONECTADO");
+            statusPrototipo.setTextColor(Color.RED);
             BtEnable();
+        }
 
         if (conectado) {
             exibirToast("Dispositivo já está conectado.");
@@ -153,6 +169,10 @@ public class ActivityMenuPrincipal extends Activity {
         Toast.makeText(ActivityMenuPrincipal.this, "Procurando dispositivo, aguarde por favor.", Toast.LENGTH_LONG).show();
 //        if(BA.startDiscovery()){}
 //        else;
+
+        pg = new ProgressDialog(context);
+        pg.setMessage("Procurando dispositivo, aguarde por favor...");
+        pg.show();
         procurar = true;
         BA.startDiscovery();
 
@@ -168,13 +188,14 @@ public class ActivityMenuPrincipal extends Activity {
                     ActivityMenuPrincipal.this.runOnUiThread(new Runnable() {
                         public void run() {
                             exibirToast("O dispositivo não foi localizado!");
+                            pg.dismiss();
                         }
                     });
                 } else {
                     //timer.cancel();
                 }
             }
-        }, 20*1000);
+        }, 10*1000);
     }
 
     // Método usado para chamar a tela de informações

@@ -19,9 +19,6 @@ public class Diagnostico extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        pg = new ProgressDialog(context);
-        pg.setMessage("Carregando...");
-        pg.show();
     }
 
     @Override
@@ -37,6 +34,5 @@ public class Diagnostico extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
-        pg.dismiss();
     }
 }

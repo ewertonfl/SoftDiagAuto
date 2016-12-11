@@ -12,10 +12,26 @@
         android:layout_height="wrap_content"
         android:columnCount="2"
         android:background="@android:color/background_light"
-        android:layout_marginTop="55dp"
+        android:layout_marginTop="50dp"
         android:baselineAligned="false"
         android:useDefaultMargins="false">
 
+        <TextView
+            android:layout_width="170dp"
+            android:layout_height="match_parent"
+            android:layout_columnSpan="1"
+            android:layout_row="0"
+            android:layout_column="0"
+            android:textAlignment="textEnd"
+            android:text="@string/statusConector" />
+
+        <TextView
+            android:id="@+id/statusConector"
+            android:layout_width="154dp"
+            android:layout_height="match_parent"
+            android:layout_row="0"
+            android:layout_column="1"
+            android:textAlignment="textStart" />
 
         <ImageView
             android:layout_width="182dp"

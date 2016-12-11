@@ -43,4 +43,5 @@
     <string name="title_connected_to">Conectado à <xliff:g id="device_name">%1$s</xliff:g></string>
     <string name="title_not_connected">Desconectado</string>
     <string name="title_activity_tela_chat">ActivityTelaChat</string>
+    <string name="statusConector">Status: </string>
 </resources>
