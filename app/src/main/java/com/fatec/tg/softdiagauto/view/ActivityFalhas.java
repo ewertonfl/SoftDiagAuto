@@ -2,6 +2,7 @@ package com.fatec.tg.softdiagauto.view;
 
 import android.app.ActionBar;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,16 +15,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fatec.tg.softdiagauto.R;
 
 import java.sql.Time;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Gabriel Rubio on 21/10/2016.
@@ -36,6 +42,9 @@ public class ActivityFalhas extends AppCompatActivity {
     String textoRel = "";
     int[]  i1= {0};
     final Context context = this;
+
+    // Intent request codes
+    private static final int REQUEST_FILTRAR = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,13 +78,12 @@ public class ActivityFalhas extends AppCompatActivity {
             case R.id.gerar_relatorio_falhas:
                 gerarRelatorio();
                 break;
-//            case R.id.filtrar_falhas:
-//                Toast.makeText(this, "Filtro ActivityFalhas", Toast.LENGTH_SHORT).show();
-//                break;
+            case R.id.filtrar_falhas:
+                filtrar();
+                break;
             case R.id.apagar_falhas:
                 Toast.makeText(this, "Apagar falhas", Toast.LENGTH_SHORT).show();
                 break;
-
         }
         return true;
     }
@@ -129,14 +137,17 @@ public class ActivityFalhas extends AppCompatActivity {
         return dateFormat.format(data_atual);
     }
 
+    public void filtrar() {
+        Intent serverIntent = new Intent(this, ActivityFiltros.class);
+        startActivityForResult(serverIntent, REQUEST_FILTRAR);
+    }
+
     class dataListAdapter extends BaseAdapter {
         String[] Title, Detail;
-
 
         dataListAdapter() {
             Title = null;
             Detail = null;
-
         }
 
         public dataListAdapter(String[] text, String[] text1, int[] text3) {
