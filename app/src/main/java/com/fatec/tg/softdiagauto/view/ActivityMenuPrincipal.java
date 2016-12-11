@@ -24,6 +24,9 @@ import com.fatec.tg.softdiagauto.util.BluetoothDiag;
 import com.fatec.tg.softdiagauto.util.BluetoothService;
 import com.fatec.tg.softdiagauto.util.Constantes;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import static com.fatec.tg.softdiagauto.util.Constantes.rData;
 
 public class ActivityMenuPrincipal extends Activity {
@@ -33,7 +36,8 @@ public class ActivityMenuPrincipal extends Activity {
     private final String[] PermissionsLocation = {Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION}; //Array de permissões relacionadas ao Bluetooth no Android 6.0 ou maior
     private final int ResquestLocationId = 0; // Código padrão para o requerimento em tempo de execução.
     private IntentFilter it = null;
-
+    private boolean procurar = true;
+    private boolean conectado = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,13 +52,15 @@ public class ActivityMenuPrincipal extends Activity {
             break;
         }
 
-
         BA = BluetoothAdapter.getDefaultAdapter();
-        BtEnable();
-        Diagnostico diag = new Diagnostico(this);
-        diag.execute();
+        if (BA == null) {
+            Toast.makeText(context, "Seu dispositivo Android não suporta Bluetooth!",Toast.LENGTH_SHORT).show();
+        } else {
+            BtEnable();
+            Diagnostico diag = new Diagnostico(this);
+            diag.execute();
+        }
     }
-
 
     private BluetoothService conexao;
 
@@ -63,24 +69,40 @@ public class ActivityMenuPrincipal extends Activity {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             // Quando a ação "discover" achar um dispositivo
-            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
 
-                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                try{
-                    if(device.getName().trim().equals(Constantes.nomeDispositivo)) {
-                        conexao = BluetoothService.getInstance(device, true);
+            if (procurar) {
+                if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                    Log.i("MAIN", "Found");
+                    BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                    try{
+                        if(device.getName().trim().equals(Constantes.nomeDispositivo)) {
+                            conexao = BluetoothService.getInstance(device, true);
 
-                        if(conexao.isConnected()) {
-                            Toast.makeText(context, "Conectado com sucesso ao dispositivo " + device.getName(), Toast.LENGTH_SHORT).show();
-                            instanciaValor();
+                            if(conexao.isConnected()) {
+                                Toast.makeText(context, "Conectado com sucesso ao dispositivo!" + device.getName(), Toast.LENGTH_SHORT).show();
+                                instanciaValor();
+                                conectado=true;
+                            } else {
+                                conectado=false;
+                                procurar=false;
+                                Toast.makeText(context, "Falha ao conectar ao dispositivo." + device.getName(), Toast.LENGTH_SHORT).show();
+                                if (BA.isEnabled()) {
+                                    BA.disable();
+                                }
+                            }
                         }
+                    }catch (Exception e) {
+                        e.printStackTrace();
                     }
-
-                }catch (Exception e) {
-                    e.printStackTrace();
+                }else{
+                    Toast.makeText(context, "Erro na tentativa de se conectar ao dispositivo.", Toast.LENGTH_SHORT).show();
                 }
-            }else{
-                Toast.makeText(context, "Erro na tentativa de se conectar", Toast.LENGTH_SHORT).show();
+            } else {
+                conectado=false;
+                Toast.makeText(context, "Dispositivo não encontrado.", Toast.LENGTH_SHORT).show();
+                if (BA.isEnabled()) {
+                    BA.disable();
+                }
             }
         }
     };
@@ -90,7 +112,14 @@ public class ActivityMenuPrincipal extends Activity {
     }
 
     public void conectarLeitor(View v){
-        lookFor();
+        if (!BA.isEnabled())
+            BtEnable();
+
+        if (conectado) {
+            exibirToast("Dispositivo já está conectado.");
+        } else {
+            lookFor();
+        }
     }
 
     public void BtEnable(){
@@ -104,12 +133,10 @@ public class ActivityMenuPrincipal extends Activity {
                     Thread.sleep(10);
                 } catch (InterruptedException ex) {
                 }
-
             }
             Log.i("MAIN", "BT Ligado!");
 
             lookFor();
-
         } else {
             lookFor();
         }
@@ -123,10 +150,31 @@ public class ActivityMenuPrincipal extends Activity {
 
     protected void lookFor() { // Procura por dispositivos
         Log.i("MAIN", "Procurando DISPOSITIVO!!");
-        Toast.makeText(ActivityMenuPrincipal.this, "Procurando dispositivo", Toast.LENGTH_SHORT).show();
-        if(BA.startDiscovery()){}
-        else
-            ;
+        Toast.makeText(ActivityMenuPrincipal.this, "Procurando dispositivo, aguarde por favor.", Toast.LENGTH_LONG).show();
+//        if(BA.startDiscovery()){}
+//        else;
+        procurar = true;
+        BA.startDiscovery();
+
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (conectado==false) {
+                    procurar=false;
+//                    if (BA.isEnabled()) {
+//                        BA.disable();
+//                    }
+                    ActivityMenuPrincipal.this.runOnUiThread(new Runnable() {
+                        public void run() {
+                            exibirToast("O dispositivo não foi localizado!");
+                        }
+                    });
+                } else {
+                    //timer.cancel();
+                }
+            }
+        }, 20*1000);
     }
 
     // Método usado para chamar a tela de informações
